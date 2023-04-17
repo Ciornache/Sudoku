@@ -8,23 +8,21 @@ void Table::initializeSquares()
         for(int j = 1; j <= width; ++j)
         {
             Square * square = new Square(SQUARE_SIZE, SQUARE_SIZE, START_X + (i - 1) * SQUARE_SIZE, START_Y + (j - 1) * SQUARE_SIZE);
-            square->setColor(WHITE), square->setBorderColor(LIGHTGRAY, -1);
+            square->setColor(squareColor), square->setBorderColor(LIGHTGRAY, -1);
             square->setValue(gridValues[i][j]);
             squares.push_back(square);
 
-            int subMat = ((i - 1) / 3) * 3 + (j - 1) / 3 + 1;
+            int sqr = sqrt(height), subMat = ((i - 1) / sqr) * sqr + (j - 1) / sqr + 1;
             sub[subMat].push_back(square);
-
         }
     }
 
     settextstyle(BOLD_FONT, 0, 5);
-    setbkcolor(GREEN);
 
     for(int i = 1; i <= height; ++i)
     {
         Square * square = new Square(SQUARE_SIZE, SQUARE_SIZE, START_X + (i - 1) * SQUARE_SIZE, START_Y - SQUARE_SIZE - 10);
-        square->setColor(GREEN), square->setBorderColor(BLACK, WHITE);
+        square->setColor(upperSquareColor), square->setBorderColor(BLACK, WHITE);
         squares.push_back(square);
         square->setValue(i + '0');
         specialSquares.push_back(square);
@@ -33,16 +31,14 @@ void Table::initializeSquares()
     for(int i = 0; i < squares.size(); ++i)
         squares[i]->init();
 
-    for(int i = 9;i >= 1; --i)
+    for(int i = height;i >= 1; --i)
         squares.pop_back();
 
     for(int i = 0;i < specialSquares.size(); ++i)
-        specialSquares[i]->placeValue(BOLD_FONT, 0, BLACK);
-
-    setbkcolor(WHITE);
+        specialSquares[i]->placeValue(BOLD_FONT, 0, textColor, 1);
 
     for(int i = 0;i < squares.size(); ++i)
-        squares[i]->placeValue(BOLD_FONT, 0, BLACK);
+        squares[i]->placeValue(BOLD_FONT, 0, textColor, 0);
 }
 
 void Table::initializeValues()
@@ -58,6 +54,15 @@ void Table::initializeValues()
 
     for(int j = 0;j < values.size(); ++j)
         gridValues[values[j].column][values[j].row] = values[j].value + '0';
+
+    if(textColor == -1)
+        textColor = BLACK;
+
+    if(squareColor == -1)
+        squareColor = WHITE;
+
+    if(upperSquareColor == -1)
+        upperSquareColor = GREEN;
 
 }
 
@@ -138,10 +143,10 @@ void Table::print()
 
 bool Table::checkRows()
 {
-    std::vector<bool> checker[10];
-    for(int i = 1;i <= 9; ++i)
+    std::vector<bool> checker[NUMBER_OF_VALUES + 5];
+    for(int i = 1;i <= height; ++i)
     {
-        for(int j = 1;j <= 12; ++j)
+        for(int j = 1;j <= NUMBER_OF_VALUES + 1; ++j)
             checker[i].push_back(0);
     }
     for(int i = 0;i < squares.size(); ++i)
@@ -160,10 +165,10 @@ bool Table::checkRows()
 
 bool Table::checkColumns()
 {
-    std::vector<bool> checker[10];
+    std::vector<bool> checker[NUMBER_OF_VALUES + 5];
     for(int i = 1;i <= 9; ++i)
     {
-        for(int j = 1;j <= 12; ++j)
+        for(int j = 1;j <= NUMBER_OF_VALUES + 1; ++j)
             checker[i].push_back(0);
     }
 
@@ -185,12 +190,13 @@ bool Table::checkColumns()
 
 bool Table::checkSubmatrixes()
 {
-    for(int i = 1;i <= 9; ++i)
+    for(int i = 1;i <= NUMBER_OF_VALUES; ++i)
     {
-        bool checker[10] = {0};
+        bool checker[NUMBER_OF_VALUES + 5] = {0};
         for(auto j : sub[i])
         {
             char value = j->getValue();
+
             if(value != ' ')
             {
                 if(checker[value - '0'])

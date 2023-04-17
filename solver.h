@@ -24,8 +24,9 @@ private:
     std::vector<int> permutations[TOTAL_PERMUTATION + 5];
 
     int height, width, numberOfCells;
-    int perm[11], permIndexes[TOTAL_PERMUTATION + 5];
-    int values[10][10];
+    int perm[NUMBER_OF_VALUES + 5], permIndexes[TOTAL_PERMUTATION + 5];
+    int values[NUMBER_OF_VALUES + 5][NUMBER_OF_VALUES + 5];
+    int chosenPermutation[NUMBER_OF_VALUES + 5];
 
     std::vector<pair<int,int>> leftCorners = {{1, 1},
                                               {4, 4},
@@ -43,13 +44,17 @@ private:
 
     void prepare();
     void getRemainingCells();
-    void fillCells(int);
 
-    bool rowValues[10][10], columnValues[10][10];
+    void fillCells(int);
+    void fillGrid2();
+
+    bool rowValues[NUMBER_OF_VALUES + 5][NUMBER_OF_VALUES + 5], columnValues[NUMBER_OF_VALUES + 5][NUMBER_OF_VALUES + 5],
+         subValues[NUMBER_OF_VALUES + 5][NUMBER_OF_VALUES + 5];
 
     bool checkRow(int row, int value);
     bool checkColumn(int column, int value);
     bool checkGrid(int sub, int value);
+    bool checkSub(int sub, int value);
 
 };
 

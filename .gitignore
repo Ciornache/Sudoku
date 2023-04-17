@@ -1,0 +1,12 @@
+
+obj/Debug/table.o
+obj/Debug/square.o
+obj/Debug/solver.o
+obj/Debug/menu.o
+obj/Debug/game.o
+bin/Debug/Sudoku.exe
+obj/Debug/config.o
+obj/Debug/main.o
+Sudoku.cbp
+Sudoku.depend
+Sudoku.layout

@@ -19,11 +19,11 @@ public:
 
 private:
 
-    char gridValues[10][10];
+    char gridValues[NUMBER_OF_VALUES + 5][NUMBER_OF_VALUES + 5];
 
     int height, width;
     std::vector<Square*> squares, specialSquares;
-    std::vector<Square*> sub[10];
+    std::vector<Square*> sub[NUMBER_OF_VALUES + 5];
 
     std::vector<cell> values;
 

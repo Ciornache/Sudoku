@@ -6,8 +6,18 @@ Solver::Solver(int height, int width)
     foundGrid = false;
     this->height = height;
     this->width = width;
+
+    if(difficulty == -1)
+        difficulty = 3;
+
 }
 
+bool Solver::checkSub(int sub, int value)
+{
+    if(subValues[sub][value])
+        return false;
+    return true;
+}
 
 bool Solver::checkRow(int row, int value)
 {
@@ -27,10 +37,12 @@ void Solver::prepare()
 {
     memset(rowValues, false, sizeof(rowValues));
     memset(columnValues, false, sizeof(columnValues));
+    memset(subValues, false, sizeof(subValues));
 }
 
 std::vector<cell> Solver::getGrid()
 {
+#if GENERATE_METHOD == 1
     prepare();
     generatePermutations();
 
@@ -40,19 +52,25 @@ std::vector<cell> Solver::getGrid()
     fillCells(0);
     randomizeGrid();
 
+#else
+    generatePermutations();
+
+    fillGrid2();
+    randomizeGrid();
+#endif
     return selectedCells;
 }
 
 
 void Solver::randomizeGrid()
 {
-    int elim = Rand(30, 35);
+    int elim = Rand(difficulty * 10, (difficulty + 1) * 10);
 
-    bool usedCells[82] = {0};
+    bool usedCells[height * width + 5] = {0};
 
     while(elim)
     {
-        int ind = Rand(0, 80);
+        int ind = Rand(0, height * width - 1);
         if(usedCells[ind])
             continue;
         selectedCells.push_back(finalGrid[ind]);
@@ -82,11 +100,12 @@ void Solver::initializeRemainingCells()
 
 void Solver::fillCells(int ind)
 {
-
     if(foundGrid)
         return;
 
-    int currentRow = rmnCells[ind].row, currentColumn = rmnCells[ind].column;
+    int currentRow = rmnCells[ind].row, currentColumn = rmnCells[ind].column, sqr = sqrt(height);
+
+    int sub = ((currentRow - 1) / sqr) * sqr + (currentColumn - 1) / sqr + 1;
 
     if(ind < numberOfCells)
     {
@@ -102,15 +121,18 @@ void Solver::fillCells(int ind)
 
             bool ok = checkRow(currentRow, j);
             ok &= checkColumn(currentColumn, j);
+            ok &= checkSub(sub, j);
 
             if(ok)
             {
                 rowValues[currentRow][j] = 1;
                 columnValues[currentColumn][j] = 1;
+                subValues[sub][j] = 1;
                 values[currentRow][currentColumn] = j;
                 fillCells(ind + 1);
                 rowValues[currentRow][j] = 0;
                 columnValues[currentColumn][j] = 0;
+                subValues[sub][j] = 0;
             }
         }
 
@@ -138,7 +160,7 @@ void Solver::initializeSubmatrices()
             for(int k = column; k <= column + 2; ++k)
             {
                 values[j][k] = permutations[permutationIndex][ind++];
-                rowValues[j][values[j][k]] = columnValues[k][values[j][k]] = 1;
+                rowValues[j][values[j][k]] = columnValues[k][values[j][k]] = subValues[i * 3 + 1 + i][values[j][k]] = 1;
             }
         }
     }
@@ -162,12 +184,12 @@ std::vector<cell> Solver::getSolution()
 {
     finalGrid.clear();
 
-    for(int i = 1;i <= height; ++i)
+    for(int i = 1; i <= height; ++i)
     {
-        for(int j = 1;j <= width; ++j)
+        for(int j = 1; j <= width; ++j)
         {
             bool ok = 0;
-            for(int k = 0;k < selectedCells.size(); ++k)
+            for(int k = 0; k < selectedCells.size(); ++k)
                 ok |= (selectedCells[k].row == i && selectedCells[k].column == j);
 
             if(!ok)
@@ -176,4 +198,33 @@ std::vector<cell> Solver::getSolution()
     }
 
     return finalGrid;
+}
+
+void Solver::fillGrid2()
+{
+    /*
+        My Solution
+    */
+    finalGrid.clear();
+    int permutationIndex = Rand(1, TOTAL_PERMUTATION);
+    for(int j = 0; j < permutations[permutationIndex].size(); ++j)
+        chosenPermutation[j + 1] = permutations[permutationIndex][j];
+
+    int row = 1;
+    for(int iteration = 1; iteration <= 3; ++iteration)
+    {
+        for(int i = 1; i <= 3; ++i)
+        {
+            for(int j = 1; j <= NUMBER_OF_VALUES; ++j)
+                finalGrid.push_back({row, j, chosenPermutation[j]});
+
+            row++;
+            if(i != 3)
+            {
+                for(int j = 1; j <= 3; ++j)
+                    rotateRight(chosenPermutation);
+            }
+        }
+        rotateRight(chosenPermutation);
+    }
 }

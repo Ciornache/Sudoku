@@ -1,7 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <bits/stdc++.h>
+#include <string.h>
+#include <algorithm>
 #include <cmath>
 #include <graphics.h>
 #include <iostream>
@@ -19,15 +20,24 @@
 #define X_BUFFER 14
 #define Y_BUFFER 8
 #define BRIGHT_RED COLOR(255, 0, 0)
+#define NUMBER_OF_VALUES 9
 
 #define MINIMUM_NUMBER_OF_CELLS 35
 #define MAXIMUM_NUMBER_OF_CELLS 45
 #define TOTAL_PERMUTATION 362880
 #define SECONDS_BUFFER 300000000
+#define GENERATE_METHOD 1
 
 using namespace std;
 
 int Rand (int a, int b);
+
+void rotateRight(int a[]);
+void pause(int seconds);
+
+
+extern int squareColor, upperSquareColor, textColor,
+    type, difficulty;
 
 struct cell
 {

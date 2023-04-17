@@ -13,7 +13,7 @@ public:
     void setBorderColor(int color, int alternant);
     void init();
     void setValue(char ch);
-    void placeValue(int font, int direction, int color);
+    void placeValue(int font, int direction, int color, bool type);
 
     char getValue();
 

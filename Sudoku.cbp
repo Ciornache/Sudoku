@@ -37,6 +37,8 @@
 		<Unit filename="game.cpp" />
 		<Unit filename="game.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="menu.cpp" />
+		<Unit filename="menu.h" />
 		<Unit filename="solver.cpp" />
 		<Unit filename="solver.h" />
 		<Unit filename="square.cpp" />
