@@ -1,0 +1,45 @@
+# depslib dependency file v1.0
+1681663930 source:d:\sudoku\sudoku\square.cpp
+	"square.h"
+
+1681635000 d:\sudoku\sudoku\square.h
+	"config.h"
+
+1681723259 d:\sudoku\sudoku\config.h
+	<bits/stdc++.h>
+	<cmath>
+	<graphics.h>
+	<iostream>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<chrono>
+	<random>
+
+1681574049 source:d:\sudoku\sudoku\main.cpp
+	"game.h"
+
+1681646102 d:\sudoku\sudoku\table.h
+	"square.h"
+	"solver.h"
+
+1681722915 source:d:\sudoku\sudoku\table.cpp
+	"table.h"
+
+1681723371 source:d:\sudoku\sudoku\game.cpp
+	"game.h"
+
+1681723050 d:\sudoku\sudoku\game.h
+	"table.h"
+
+1681581607 source:d:\sudoku\sudoku\validator.cpp
+
+1681722040 d:\sudoku\sudoku\solver.h
+	"config.h"
+
+1681722105 source:d:\sudoku\sudoku\solver.cpp
+	"solver.h"
+
+1681666104 source:d:\sudoku\sudoku\config.cpp
+	"config.h"
+
