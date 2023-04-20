@@ -210,9 +210,57 @@ bool Table::checkSubmatrixes()
 
 bool Table::checkGrid()
 {
-
 //    std::cout << this->checkColumns() << ' ' << this->checkSubmatrixes() << ' ' << this->checkRows() << '\n';
 
     return this->checkColumns() && this->checkSubmatrixes()
                     && this->checkRows();
+}
+
+void Table::drawHealthPoints(int index, char path[])
+{
+    heartLeftCorners.push_back({HEALTH_UPPER_X + (index - 1) * HEALTH_OFFSET, HEALTH_UPPER_Y});
+    heartRightCorners.push_back({HEALTH_LOWER_X + (index - 1) * HEALTH_OFFSET, HEALTH_LOWER_Y});
+
+    readimagefile(path, HEALTH_UPPER_X + (index - 1) * HEALTH_OFFSET, HEALTH_UPPER_Y,
+                               HEALTH_LOWER_X + (index - 1) * HEALTH_OFFSET, HEALTH_LOWER_Y);
+}
+
+void Table::removeHeart(int index)
+{
+    readimagefile("props/black.jpg", heartLeftCorners[index - 1].first, heartLeftCorners[index - 1].second,
+                               heartRightCorners[index - 1].first, heartRightCorners[index - 1].second);
+}
+
+void Table::drawLightBulb(char path[])
+{
+    readimagefile(path, BULB_UPPER_X, BULB_UPPER_Y,
+                        BULB_LOWER_X, BULB_LOWER_Y);
+}
+
+std::vector<Square*> Table::getUnfilledCells()
+{
+    std::vector<Square*> unfilledCells;
+
+    for(int i = 0;i < squares.size(); ++i)
+    {
+        if(squares[i]->getValue() == ' ')
+            unfilledCells.push_back(squares[i]);
+    }
+    return unfilledCells;
+}
+
+bool Table::checkLightBulb(int xCoordinate, int yCoordinate)
+{
+    return xCoordinate >= BULB_UPPER_X && xCoordinate <= BULB_LOWER_X &&
+          yCoordinate >= BULB_UPPER_Y && yCoordinate <= BULB_LOWER_Y;
+}
+
+bool Table::isEmpty()
+{
+    for(int i = 0;i < squares.size(); ++i)
+    {
+        if(squares[i]->getValue() == ' ')
+            return false;
+    }
+    return true;
 }

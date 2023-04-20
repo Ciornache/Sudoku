@@ -43,6 +43,7 @@ void Solver::prepare()
 std::vector<cell> Solver::getGrid()
 {
 #if GENERATE_METHOD == 1
+
     prepare();
     generatePermutations();
 
@@ -65,6 +66,7 @@ std::vector<cell> Solver::getGrid()
 void Solver::randomizeGrid()
 {
     int elim = Rand(difficulty * 10, (difficulty + 1) * 10);
+    elim = min(elim, 81);
 
     bool usedCells[height * width + 5] = {0};
 
@@ -172,7 +174,7 @@ void Solver::generatePermutations()
         perm[i] = i;
 
     int contor = 1;
-    while(std::next_permutation(perm + 1, perm + 10))
+    while(std::next_permutation(perm + 1, perm + NUMBER_OF_VALUES + 1))
     {
         for(int i = 1; i <= 9; ++i)
             permutations[contor].push_back(perm[i]);
@@ -227,4 +229,12 @@ void Solver::fillGrid2()
         }
         rotateRight(chosenPermutation);
     }
+}
+
+int Solver::getValueForCell(int xCoordinate, int yCoordinate)
+{
+     int column = (xCoordinate - START_X) / SQUARE_SIZE + 1;
+     int row = (yCoordinate - START_Y) / SQUARE_SIZE + 1;
+
+     return values[row][column];
 }

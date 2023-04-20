@@ -17,6 +17,8 @@ public:
     void initializeGrid();
     void solveGrid();
 
+    int getValueForCell(int row, int column);
+
 private:
 
     bool foundGrid;

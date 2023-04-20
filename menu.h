@@ -6,6 +6,7 @@
 class Menu
 {
 public:
+
     Menu();
     void askForData();
 
@@ -15,7 +16,6 @@ private:
     void lowerCase(std::string & text);
 
 };
-
 
 
 

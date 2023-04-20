@@ -6,12 +6,21 @@ Game::Game()
     table = new Table(TABLE_HEIGHT, TABLE_WIDTH);
     menu = new Menu;
     initwindow(700, 700, "Sudoku", 400, 50);
+    healthPoints = 3;
+}
+
+Game::~Game()
+{
+    delete table;
+    delete menu;
 }
 
 void Game::initializeStyle()
 {
     settextstyle(BOLD_FONT, 0, 5);
     setcolor(BLACK);
+    initializeHealthPoints("props/heart.jpg");
+    initializeLightBulb("props/lightbulb.jpg");
 }
 
 void Game::start()
@@ -34,9 +43,24 @@ void Game::run()
 
     while(1)
     {
+        if(table->isEmpty())
+        {
+            std::cout << "-> YOU WON!";
+            finish("props/likeEmoji.jpg");
+        }
+
         int xCoordinate = -1, yCoordinate = -1;
 
         getClick(xCoordinate, yCoordinate);
+
+        bool isLightBulb = table->checkLightBulb(xCoordinate, yCoordinate);
+        if(isLightBulb && numberOfHints > 0)
+        {
+            numberOfHints--;
+            giveHint();
+            continue;
+        }
+
         Square * square = table->findSpecialSquare(xCoordinate, yCoordinate);
         if(square == NULL)
         {
@@ -70,15 +94,25 @@ void Game::run()
         bool validMove = table->checkGrid();
         if(!validMove)
         {
+            table->removeHeart(healthPoints);
+            healthPoints--;
+
+            if(healthPoints == 0)
+            {
+                std::cout << "-> YOU LOST!";
+                finish("props/dislikeEmoji.jpg");
+            }
+
             targetSquare->setValue('!');
             targetSquare->placeValue(BOLD_FONT, 0, BRIGHT_RED, 0);
+
             pause(2);
+
             targetSquare->setValue(' ');
             targetSquare->placeValue(BOLD_FONT, 0, textColor, 0);
             continue;
         }
         targetSquare->placeValue(BOLD_FONT, 0, textColor, 0);
-
     }
 }
 
@@ -113,4 +147,43 @@ void Game::printSolution()
 void Game::ask()
 {
     menu->askForData();
+}
+
+void Game::initializeHealthPoints(char path[])
+{
+    for(int i = 1;i <= healthPoints; ++i)
+        table->drawHealthPoints(i, path);
+}
+
+void Game::finish(char path[])
+{
+    int finishWindow = initwindow(END_WINDOW_HEIGHT, END_WINDOW_WIDTH, "End Window", 400, 100);
+
+    setcurrentwindow(finishWindow);
+    readimagefile(path, X_LEFT_CORNER, Y_LEFT_CORNER,
+                                      END_WINDOW_HEIGHT, END_WINDOW_WIDTH);
+    pause(10);
+    exit(0);
+}
+
+void Game::initializeLightBulb(char path[])
+{
+    table->drawLightBulb(path);
+}
+
+Square * Game::pickRandomCell()
+{
+    std::vector<Square*> unfilledCells = table->getUnfilledCells();
+    int index = Rand(0, unfilledCells.size() - 1);
+    return unfilledCells[index];
+}
+
+void Game::giveHint()
+{
+    Square * square = pickRandomCell();
+
+    int value = table->solver->getValueForCell(square->getStartX(), square->getStartY());
+
+    square->setValue(value + '0');
+    square->placeValue(BOLD_FONT, 0, textColor, 0);
 }

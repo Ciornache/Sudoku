@@ -36,6 +36,8 @@ void Menu::askForData()
                 continue;
             }
         }
+        else if(instruction.first == "amogus please sus the game")
+            difficulty = 8;
         else if(instruction.first == "set square color")
             squareColor = instruction.second;
         else if(instruction.first == "set text color")
