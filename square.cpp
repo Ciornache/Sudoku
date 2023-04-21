@@ -80,6 +80,7 @@ void Square::placeValue(int font, int direction, int color, bool squareType)
 {
     char text[2];
     text[0] = value, text[1] = '\0';
+
     setcolor(color);
     settextstyle(font, direction, 5);
 

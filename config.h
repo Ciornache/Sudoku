@@ -54,7 +54,7 @@ void pause(int seconds);
 
 
 extern int squareColor, upperSquareColor, textColor,
-    type, difficulty;
+    type, difficulty, borderColor;
 
 struct cell
 {

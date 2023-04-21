@@ -8,7 +8,7 @@ void Table::initializeSquares()
         for(int j = 1; j <= width; ++j)
         {
             Square * square = new Square(SQUARE_SIZE, SQUARE_SIZE, START_X + (i - 1) * SQUARE_SIZE, START_Y + (j - 1) * SQUARE_SIZE);
-            square->setColor(squareColor), square->setBorderColor(LIGHTGRAY, -1);
+            square->setColor(squareColor), square->setBorderColor(borderColor, -1);
             square->setValue(gridValues[i][j]);
             squares.push_back(square);
 
@@ -22,7 +22,7 @@ void Table::initializeSquares()
     for(int i = 1; i <= height; ++i)
     {
         Square * square = new Square(SQUARE_SIZE, SQUARE_SIZE, START_X + (i - 1) * SQUARE_SIZE, START_Y - SQUARE_SIZE - 10);
-        square->setColor(upperSquareColor), square->setBorderColor(BLACK, WHITE);
+        square->setColor(upperSquareColor), square->setBorderColor(borderColor, WHITE);
         squares.push_back(square);
         square->setValue(i + '0');
         specialSquares.push_back(square);
@@ -64,6 +64,8 @@ void Table::initializeValues()
     if(upperSquareColor == -1)
         upperSquareColor = GREEN;
 
+    if(borderColor == -1)
+        borderColor = LIGHTGRAY;
 }
 
 void Table::init()

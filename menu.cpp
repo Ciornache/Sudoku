@@ -3,7 +3,7 @@
 
 Menu::Menu()
 {
-    type = squareColor = upperSquareColor = textColor = difficulty = -1;
+    setToDefault();
 }
 
 void Menu::askForData()
@@ -36,6 +36,10 @@ void Menu::askForData()
                 continue;
             }
         }
+        else if(instruction.first == "set to default")
+            setToDefault();
+        else if(instruction.first == "set border color")
+            borderColor = instruction.second;
         else if(instruction.first == "amogus please sus the game")
             difficulty = 8;
         else if(instruction.first == "set square color")
@@ -52,6 +56,8 @@ void Menu::askForData()
             std::cout << " -> BLACK : 0\n -> BLUE : 1\n -> GREEN : 2\n -> CYAN : 3\n -> RED : 4\n -> MANGENTA : 5\n -> BROWN : 6\n -> LIGHTGRAY : 7\n -> DARKGRAY : 8\n";
             std::cout << " -> LIGHTBLUE : 9\n -> LIGHTGREEEN : 10\n -> LIGHTCYAN : 11\n -> LIGHTRED : 12\n -> LIGHTMAGENTA : 13\n -> YELLOW : 14\n -> WHITE : 15\n\n";
         }
+        else if(instruction.first == "show preview")
+            showPreview();
         else if(instruction.first == "ready")
             break;
         else
@@ -88,4 +94,29 @@ std::pair<std::string, int> Menu::extractCommand(string text)
     }
 
     return {command, number};
+}
+
+void Menu::showPreview()
+{
+    Table * table = new Table(TABLE_HEIGHT, TABLE_WIDTH);
+    int gdriver = DETECT, gmode;
+
+    initgraph(&gdriver, &gmode, "");
+
+    int previewWindow = initwindow(700, 700, "Preview Window", 400, 50);
+
+    setcurrentwindow(previewWindow);
+
+    table->init();
+    pause(10);
+
+    closegraph();
+
+    delete table;
+}
+
+void Menu::setToDefault()
+{
+    type = squareColor = upperSquareColor
+    = textColor = difficulty = borderColor = -1;
 }

@@ -2,6 +2,7 @@
 #define H_MENU
 
 #include "config.h"
+#include "table.h"
 
 class Menu
 {
@@ -14,6 +15,8 @@ private:
 
     std::pair<std::string, int> extractCommand(std::string text);
     void lowerCase(std::string & text);
+    void showPreview();
+    void setToDefault();
 
 };
 

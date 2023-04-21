@@ -8,7 +8,7 @@ int Rand(int a, int b)
 }
 
 int squareColor, upperSquareColor, textColor,
-    type, difficulty;
+    type, difficulty, borderColor;
 
 void rotateRight(int a[])
 {

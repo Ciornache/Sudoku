@@ -5,8 +5,6 @@ Game::Game()
 {
     table = new Table(TABLE_HEIGHT, TABLE_WIDTH);
     menu = new Menu;
-    initwindow(700, 700, "Sudoku", 400, 50);
-    healthPoints = 3;
 }
 
 Game::~Game()
@@ -25,6 +23,11 @@ void Game::initializeStyle()
 
 void Game::start()
 {
+    int gmode, gdriver = DETECT;
+
+    initgraph(&gdriver, &gmode, "");
+    initwindow(700, 700, "Sudoku", 400, 50);
+
     if(type == -1)
         type = 1;
 
@@ -92,10 +95,12 @@ void Game::run()
         targetSquare->setValue(square->getValue());
 
         bool validMove = table->checkGrid();
+
         if(!validMove)
         {
             table->removeHeart(healthPoints);
             healthPoints--;
+            goodMoves = 0;
 
             if(healthPoints == 0)
             {
@@ -112,7 +117,15 @@ void Game::run()
             targetSquare->placeValue(BOLD_FONT, 0, textColor, 0);
             continue;
         }
+
+        goodMoves++;
         targetSquare->placeValue(BOLD_FONT, 0, textColor, 0);
+
+        if(goodMoves == 10)
+        {
+            numberOfHints++;
+            goodMoves = 0;
+        }
     }
 }
 
@@ -130,13 +143,15 @@ void Game::printSolution()
 
     for(int i = 0; i < solution.size(); ++i)
     {
-
         int row = START_X + (solution[i].row - 1) * SQUARE_SIZE;
         int column = START_Y + (solution[i].column - 1) * SQUARE_SIZE;
+
         Square * square = table->findSquare(column, row);
 //        std::cout << square->getStartX() << ' ' << square->getStartY() << '\n';
+
         square->setValue(solution[i].value + '0');
         square->placeValue(BOLD_FONT, 0, BRIGHT_RED, 0);
+
         pause(1);
         square->placeValue(BOLD_FONT, 0, textColor, 0);
         pause(2);
@@ -151,7 +166,7 @@ void Game::ask()
 
 void Game::initializeHealthPoints(char path[])
 {
-    for(int i = 1;i <= healthPoints; ++i)
+    for(int i = 1; i <= healthPoints; ++i)
         table->drawHealthPoints(i, path);
 }
 
@@ -161,7 +176,7 @@ void Game::finish(char path[])
 
     setcurrentwindow(finishWindow);
     readimagefile(path, X_LEFT_CORNER, Y_LEFT_CORNER,
-                                      END_WINDOW_HEIGHT, END_WINDOW_WIDTH);
+                  END_WINDOW_HEIGHT, END_WINDOW_WIDTH);
     pause(10);
     exit(0);
 }

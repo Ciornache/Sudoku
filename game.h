@@ -18,6 +18,7 @@ private:
 
     int healthPoints = 3;
     int numberOfHints = 3;
+    int goodMoves = 0;
 
     Table * table;
     Menu * menu;
